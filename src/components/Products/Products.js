@@ -7,7 +7,7 @@ const Products = () => {
 
   return (
     <section>
-      {products.map(product => <Product{...products[product.id - 1]} key={product.id}/>)}; {/* nie umiem wyjasnic dokladniejak działa Product{...products[0]}, jak dodac dodatkowy parametr key */}
+      {products.map(product => <Product{...products[product.id - 1]} key={product.id}/>)}; 
     
     </section>
   );

@@ -1,17 +1,19 @@
 import styles from './Product.module.scss';
 import Button from '../Product/ProductForm/Button/Button';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import Color from './ProductForm/OptionColor/Color'
 import Size from './ProductForm/OptionSize/Size'
 
 
 const Product = props => {
+  
   const [choice, setChoice]= useState([
     {
       currentColor: props.colors[0],
       currentSize: 'S'
     }
   ])
+  
 
   const toUpper = firstUp =>{
 
@@ -21,7 +23,8 @@ const Product = props => {
     )
   }
 
-  const calculatePrice = price =>{
+  
+  const getPrice =useMemo(()=>price =>{
     let result = props.sizes.find(({name}) => name === choice.currentSize)
     if(result){
       price = result.additionalPrice + price
@@ -29,7 +32,7 @@ const Product = props => {
         price
       )
     }
-  }   
+  }   ,[choice.currentSize, props.sizes]);
 
   return (
     <article className={styles.product}>
@@ -42,7 +45,7 @@ const Product = props => {
       <div>
         <header>
           <h2 className={styles.name}>{props.title}</h2>
-          <span className={styles.price}>{calculatePrice(props.basePrice)}$</span>
+          <span className={styles.price}>{getPrice(props.basePrice)}$</span>
         </header>
         <form>
           <div className={styles.sizes}>
@@ -57,7 +60,7 @@ const Product = props => {
               <Color colors={props.colors} setChoice={setChoice} currentSize={choice.currentSize}   currentColor={choice.currentColor} toUpper={toUpper}/>
             </ul>
           </div>
-          <Button className={styles.button} color={choice.currentColor} size={choice.currentSize} pay={calculatePrice(props.basePrice)} name={props.title}>
+          <Button className={styles.button} color={choice.currentColor} size={choice.currentSize} pay={getPrice(props.basePrice)} name={props.title}>
             <span className="fa fa-shopping-cart" />
           </Button>
         </form>
